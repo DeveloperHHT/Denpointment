@@ -1,116 +1,126 @@
 # Denpointment
 
-> **This is a fork.** The application was written by [Uğur Dindar (Tzesh)](https://github.com/Tzesh) and the original lives at [Tzesh/Denpointment](https://github.com/Tzesh/Denpointment). All the credit for the system, its database and its screenshots below goes to the original author. This fork only revises it (see [What changed in this fork](#what-changed-in-this-fork)). The upstream repository has no licence file, so no licence is granted here beyond what GitHub's terms allow for forks.
+> **This is a fork.** The application was written by [Uğur Dindar (Tzesh)](https://github.com/Tzesh) and the original lives at [Tzesh/Denpointment](https://github.com/Tzesh/Denpointment). The system, its database and its idea are his. This fork reorganises the code and revises the interface (see [What changed in this fork](#what-changed-in-this-fork)). The upstream repository has no licence file, so no licence is granted here beyond what GitHub's terms allow for forks.
 
-Fully-working dentist appointment system which is written in Python using Flask web development, powered by Bootstrap, using MySQL to manipulate data. It's based on a statement of work, developed first its own database and then application. Its database has much quite enough good mock data.
+A dentist appointment system written in Python with Flask. Patients register, add their contact data and book appointments; dentists see their day, record treatments and medicines, plan holidays and read statistics.
 
-## Main page of the system
-![Index page](https://imgur.com/t6Hdc5k.png)
+![Patient dashboard](Docs/Images/patient-dashboard-light.png)
 
-# Denpoinment System - Patient Perspective
-Denpointment system allows patients to:
-1. Register to the system,
-2. Use the system after adding address and telephone information,
-3. Add chronic disease information if any,
-5. Search for an appointment and book appointments after search,
-6. Look for past appointments (treatments if patient has been gone to the appointment), upcoming appointments,
-7. And of course change their information like email, password, telephone, address, chronic disease information.
+| Booking | Dark theme | Phone |
+| --- | --- | --- |
+| ![Booking](Docs/Images/book-light.png) | ![Dark theme](Docs/Images/patient-appointments-dark.png) | ![Phone](Docs/Images/today-mobile.png) |
 
-## Patient Registration
-![Patient registration](https://imgur.com/nV2d6qF.png)
+The illustrated **[user guide (PDF)](Docs/User-Guide.pdf)** walks through every page.
 
-## New User Login
-Users have to add address and telephone information to use the system.
-![New user page](https://imgur.com/GbLRAnM.png)
+## Features
 
-## Profile Page
-Users can easily change their email, password, address and phone information in the profile page. But there are some restrictions like patients cannot delete their phone and address number if they only have only one.
-![Profile page](https://imgur.com/P2Ll0ow.png)
-![Restriction example](https://imgur.com/LSTkyX0.png)
-![Changing password](https://imgur.com/ozVFdBr.png)
-![Adding address information](https://imgur.com/xNerPop.png)
-![Activating account](https://imgur.com/lkJy5bj.png)
-## Patient Login
-![Patient login page](https://imgur.com/mCYRMmo.png)
+**Patients**
+- register, then activate the account by adding an address and a phone number,
+- keep addresses, phone numbers and chronic diseases, change email and password,
+- book one appointment at a time for the rest of the current month,
+- see upcoming and past appointments, with treatment, charge and medicines.
 
-## Booking An Appointment
-![Booking an appointment](https://imgur.com/7B8tVOj.png)
+**Dentists**
+- today's appointments with the treatment form, medicines per treatment,
+- upcoming appointments and the profiles of the patients who booked,
+- treatment history with a search by date,
+- holidays (next month only, three days at most) that block booking,
+- statistics: busiest dentists, common complaints, average and highest charges.
 
-## My Appointments Page
-![My appointments page](https://imgur.com/aJxer79.png)
+## Quick start (demo, no MySQL needed)
 
-# Denpoinment System - Dentist Perspective
-Denpointment system allows dentists to:
-1. See the upcoming appointments,
-2. Look for every single patient's profile and see their handy information,
-3. Look for today's appointments and add treatment information to them,
-4. Look for past treatments (and appointments if patient didn't come to the treatment), and search for past treatments by date,
-5. Add holiday information, and of course to view upcoming and past holidays,
-6. Look for interesting statistics in the system, that can be either dentist statistics or patient statistics.
+You need Python 3.9 or newer.
 
-## Dentist Login
-![Dentist Login](https://imgur.com/YbPIKcC.png)
+```
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python main.py --demo
+```
 
-## Upcoming Appointments
-![Upcoming appointments](https://imgur.com/bHQpG6r.png)
+Open http://127.0.0.1:5000. The demo uses a throw-away SQLite file in `Data/` that is created again on every start, with dates relative to today. All demo accounts use the password `demo1234`:
 
-## Today's Appointments
-![Today's appointments](https://imgur.com/hQJqB7e.png)
-![Today's appointments-2](https://imgur.com/Rz4D3nm.png)
-![Adding treatment](https://imgur.com/84H1afl.png)
-### Note: Dentists can only add treatments (or medicines) to appointments which only booked for today.
-![Medicines](https://imgur.com/s1jZQ2A.png)
-
-## Past Treatments
-![Past treatments](https://imgur.com/fxjdYEf.png)
-![Searching treatments](https://imgur.com/OdvMrZy.png)
-
-## Holidays
-![Holidays](https://imgur.com/jfNp0M6.png)
-![Adding holiday](https://imgur.com/5iT12sA.png)
-
-## Patient profiles
-![Patient profile](https://imgur.com/5hT2d2k.png)
-
-## Patient & Dentist Statistics
-![Patient statistics](https://imgur.com/6CA082x.png)
-![Dentist statistics](https://imgur.com/z3JeWbw.png)
-
-## How to use Denpointment?
-You need Python 3 and a MySQL (or MariaDB) server.
-
-1. Create a database named `dentist_management_system` and import `dentist_management_system.sql` into it.
-2. Create a virtual environment and install the packages:
-   ```
-   python3 -m venv .venv
-   .venv/bin/pip install -r requirements.txt
-   ```
-   `Flask-MySQLdb` builds the `mysqlclient` package, which needs the MySQL client library on your machine.
-3. Set the database settings and a secret key (all optional, the defaults are shown):
-   ```
-   export DENPOINTMENT_DB_HOST=localhost
-   export DENPOINTMENT_DB_USER=root
-   export DENPOINTMENT_DB_PASSWORD=
-   export DENPOINTMENT_DB_NAME=dentist_management_system
-   export DENPOINTMENT_SECRET_KEY=<a long random string>
-   ```
-   Without a secret key a random one is made at start, so everybody is logged out whenever the server restarts.
-4. Run `.venv/bin/python denpointment.py`. The system runs on http://127.0.0.1:5000/.
-
-![Running denpointment.py](https://imgur.com/UvlNwx7.png)
-
-### Demo credentials
-These come with the sample database. The password for all three is `tzesh`.
-
-| Role | Email |
+| Email | Shows |
 | --- | --- |
-| Person | demoperson@gmail.com |
-| Patient | demopatient@gmail.com |
-| Dentist | demodentist@gmail.com |
+| `patient@denpointment.example` | a patient with an upcoming appointment and a history |
+| `patient2@denpointment.example` | a patient who can book right now |
+| `fresh@denpointment.example` | a new account that still has to add an address and a phone number |
+| `dentist@denpointment.example` | a dentist with appointments today, upcoming ones and holidays |
+
+## Running with MySQL
+
+1. Create a database named `dentist_management_system` and import [Backend/Database/dentist_management_system.sql](Backend/Database/dentist_management_system.sql). It comes with sample data; the accounts `demoperson@gmail.com`, `demopatient@gmail.com` and `demodentist@gmail.com` have the password `tzesh`.
+2. Install the packages (see above) and set the connection. Everything is optional, the defaults are shown:
+
+   | Variable | Default |
+   | --- | --- |
+   | `DENPOINTMENT_DB_HOST` | `localhost` |
+   | `DENPOINTMENT_DB_PORT` | `3306` |
+   | `DENPOINTMENT_DB_USER` | `root` |
+   | `DENPOINTMENT_DB_PASSWORD` | empty |
+   | `DENPOINTMENT_DB_NAME` | `dentist_management_system` |
+   | `DENPOINTMENT_SECRET_KEY` | random at every start, so everybody is logged out after a restart; set a long random string in production |
+
+3. Start it with `.venv/bin/python main.py`. Options: `--host`, `--port`, `--debug`.
+
+`main.py` uses Flask's development server. Put a real WSGI server (for example gunicorn with `Backend.app:create_app()`) in front of it for production.
+
+## Project layout
+
+```
+main.py                 Starts the app (--demo for the SQLite demo)
+version.py              Version, raised by a git hook on every commit
+requirements.txt
+Backend/
+  app.py                Application factory
+  config.py             Settings from environment variables
+  database.py           MySQL (PyMySQL) and SQLite behind one small class
+  forms.py              Flask-WTF forms (input shape, CSRF)
+  security.py           Login and role decorators
+  clock.py              The current time, replaceable in tests
+  repositories/         All SQL, one class per part of the data
+  services/             The rules of the clinic (booking, holidays, treatments, ...)
+  routes/               Blueprints: auth, account, patient, dentist
+  Database/             MySQL dump with sample data, SQLite schema
+Frontend/
+  templates/            Jinja templates
+  static/               CSS (light and dark theme), JS, icons
+Tests/                  pytest suite
+Scripts/                Demo data, screenshots, guide build, version bump
+Docs/                   User guide (HTML source, PDF) and its images
+```
+
+Requests go routes → services → repositories → database. Services raise a `RuleViolation` with a message when a rule is broken and the route shows it; routes never contain SQL and repositories never contain rules.
+
+## Tests
+
+```
+.venv/bin/python -m pytest
+```
+
+The suite (about 80 tests) runs against SQLite with a fixed clock: login and registration, profile rules, booking rules, holidays, treatments and medicines, role guards, CSRF, statistics and that every page opens.
 
 ## What changed in this fork
-- The database settings and the secret key are read from environment variables instead of being written in the code.
-- `requirements.txt` lists the packages, `.gitignore` covers the virtual environment, and the README explains the setup step by step.
-- `version.py` holds the version of this fork, raised by a git hook on every commit (`Scripts/bump_version.py`; enable it with `git config core.hooksPath .githooks`).
 
-Not tested: this fork has not been run against a MySQL server. The changes only touch configuration and documentation, and the Python files were checked for syntax errors only.
+- **Structure:** the single `denpointment.py` is split into an application factory, blueprints, services and repositories; settings and the secret key come from environment variables.
+- **Interface:** rebuilt without the bundled Bootstrap: own CSS with a light and a dark theme, responsive layout (tables become cards on phones), animations, inline icons, confirm dialogs, toasts. No external CDN or font is loaded.
+- **Security:** CSRF tokens on every form, delete actions are POST requests instead of links, the same message for a wrong email and a wrong password, a new session after login, only local addresses are accepted as the page to return to, security headers and a content security policy, a dentist only sees patients who booked with them.
+- **Fixes:** the digit checks of the forms were not anchored, so letters next to digits were accepted; appointment times are compared as one number instead of month by month; the statistics SQL now also runs with MySQL's default `ONLY_FULL_GROUP_BY`.
+- **Extras:** a demo mode, tests, the illustrated user guide and `version.py`.
+
+Not tested: the MySQL path has **not** been run against a real MySQL server. The SQL is plain ANSI and was checked against the column names of the dump, and the whole application runs against SQLite in the tests, but a first run on MySQL is the first real test of that path. Browsers: the interface was checked with Chromium only.
+
+## Versioning
+
+`version.py` holds the version. A git hook raises it on every commit (`0.0.9` becomes `0.1.0`, `0.9.9` becomes `1.0.0`). Enable it once after cloning:
+
+```
+git config core.hooksPath .githooks
+```
+
+## Rebuilding the screenshots and the guide
+
+```
+.venv/bin/python main.py --demo --port 5057
+PLAYWRIGHT_PATH=/path/to/node_modules/playwright node Scripts/screenshots.mjs http://127.0.0.1:5057 Docs/Images
+BROWSER="/path/to/a/chromium/based/browser" sh Scripts/build_guide.sh
+```

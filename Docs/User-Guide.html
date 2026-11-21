@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Denpointment User Guide</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 20mm; @bottom-center { content: counter(page); font: 9pt "Helvetica Neue", Arial, sans-serif; color: #587079; } }
+  @page :first { margin: 0; @bottom-center { content: none; } }
+  :root { --ink: #0e2a30; --muted: #587079; --teal: #0d9488; --teal-dark: #0b756b; --soft: #d8f2ee; --line: #e1eaed; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 10.5pt/1.55 "Helvetica Neue", Arial, sans-serif; color: var(--ink); }
+  h1, h2, h3 { line-height: 1.2; margin: 0; }
+  a { color: var(--teal-dark); text-decoration: none; }
+
+  .cover { height: 297mm; padding: 28mm 22mm; color: #fff; background: linear-gradient(150deg, #0b4f4a 0%, #0d9488 55%, #2563eb 130%); position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover::before { content: ""; position: absolute; width: 160mm; height: 160mm; border-radius: 50%; background: rgba(255,255,255,.08); right: -60mm; top: -50mm; }
+  .cover::after { content: ""; position: absolute; width: 110mm; height: 110mm; border-radius: 50%; background: rgba(255,255,255,.07); left: -40mm; bottom: -30mm; }
+  .cover > * { position: relative; z-index: 1; }
+  .mark { width: 22mm; height: 22mm; border-radius: 6mm; background: rgba(255,255,255,.18); display: grid; place-items: center; }
+  .cover h1 { font-size: 40pt; letter-spacing: -.02em; margin-bottom: 6mm; }
+  .cover p { font-size: 14pt; max-width: 120mm; opacity: .92; }
+  .cover small { font-size: 10pt; opacity: .8; }
+
+  .toc { page-break-after: always; }
+  .toc h2 { font-size: 22pt; margin-bottom: 8mm; }
+  .toc ol { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  .toc li { display: flex; align-items: baseline; gap: 4mm; padding: 3mm 0; border-bottom: 1px solid var(--line); font-size: 12pt; }
+  .toc li b { color: var(--teal); min-width: 8mm; }
+  .toc li span { color: var(--muted); font-size: 9.5pt; margin-left: auto; }
+
+  section.chapter { page-break-before: always; }
+  .toc + section.chapter { page-break-before: auto; }
+  .chapter > h2 { font-size: 22pt; color: var(--teal-dark); padding-bottom: 4mm; margin-bottom: 6mm; border-bottom: 3px solid var(--soft); }
+  .chapter > h2 em { font-style: normal; color: var(--teal); margin-right: 3mm; }
+  .lead { color: var(--muted); font-size: 11.5pt; margin-bottom: 6mm; }
+
+  .step { position: relative; padding-left: 14mm; margin: 0 0 7mm; }
+  .num { position: absolute; left: 0; top: 0; width: 9mm; height: 9mm; border-radius: 50%; background: var(--teal); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 11pt; }
+  .step h3 { font-size: 13pt; margin-bottom: 1.5mm; }
+  .step p { margin: 0 0 3mm; }
+  figure { margin: 3mm 0 0; page-break-inside: avoid; break-inside: avoid; }
+  .step h3 { break-after: avoid; }
+  figure img { width: 100%; display: block; border: 1px solid var(--line); border-radius: 3mm; box-shadow: 0 2mm 5mm rgba(14,42,48,.12); }
+  figure.narrow img { width: 55%; margin: 0 auto; }
+  figure.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  figcaption { margin-top: 2mm; color: var(--muted); font-size: 9pt; text-align: center; }
+  .note { margin: 4mm 0; padding: 3.5mm 4.5mm; border-radius: 3mm; background: var(--soft); border-left: 1.2mm solid var(--teal); page-break-inside: avoid; }
+  .note.warn { background: #fdf0d3; border-color: #d97706; }
+  table { width: 100%; border-collapse: collapse; margin: 3mm 0 6mm; page-break-inside: avoid; }
+  th { text-align: left; background: var(--soft); color: var(--teal-dark); padding: 2.5mm 3mm; font-size: 9.5pt; }
+  td { padding: 2.5mm 3mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+  code, pre { font-family: Menlo, Consolas, monospace; font-size: 9pt; background: #f1f6f7; border-radius: 1.5mm; }
+  code { padding: .3mm 1.3mm; }
+  pre { padding: 3.5mm 4mm; line-height: 1.5; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="mark"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.5-1.5-4-2-5.8-.7C4 6.9 4.2 10 5.200 12.800c.6 1.600 1 3 1.400 4.800.3 1.800.8 3.900 2.100 3.900 1.200 0 1.100-3.200 1.900-4.900.5-1.100 1.100-1.100 1.600-1.100s1.100 0 1.600 1.100c.8 1.700.7 4.900 1.900 4.900 1.300 0 1.800-2.100 2.100-3.900.4-1.800.8-3.200 1.400-4.800 1-2.800 1.200-5.900-1-7.500C16 4 13.500 4.500 12 6z"/></svg></div>
+  <div>
+    <h1>Denpointment</h1>
+    <p>User guide for patients and dentists: from the first login to the statistics page.</p>
+  </div>
+  <small>A revised fork of Tzesh/Denpointment · Screenshots show the demo data</small>
+</div>
+
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><b>1</b>Getting started<span>Run the app, demo accounts, the interface</span></li>
+    <li><b>2</b>For patients<span>Register, activate, book, follow your treatments</span></li>
+    <li><b>3</b>For dentists<span>Today, treatments, medicines, holidays, statistics</span></li>
+    <li><b>4</b>The rules at a glance<span>What the system allows and what it refuses</span></li>
+    <li><b>5</b>Themes and small screens<span>Dark mode and the phone layout</span></li>
+    <li><b>6</b>Troubleshooting<span>Common questions</span></li>
+  </ol>
+</div>
+
+<section class="chapter">
+  <h2><em>1</em>Getting started</h2>
+  <p class="lead">Denpointment runs on your own computer. You need Python 3.9 or newer. MySQL is only needed for real data; the demo mode works without it.</p>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>Install and start the demo</h3>
+    <p>Open a terminal in the project folder and run these commands once. The demo opens on <code>http://127.0.0.1:5000</code>.</p>
+<pre>python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python main.py --demo</pre>
+    <p>For a real database, import <code>Backend/Database/dentist_management_system.sql</code> into MySQL, set the <code>DENPOINTMENT_DB_*</code> variables described in the README and start with <code>python main.py</code>.</p>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>Log in</h3>
+    <p>The demo has four accounts, all with the password <code>demo1234</code>.</p>
+    <table>
+      <tr><th>Email</th><th>What it shows</th></tr>
+      <tr><td><code>patient@denpointment.example</code></td><td>A patient with an upcoming appointment and a history</td></tr>
+      <tr><td><code>patient2@denpointment.example</code></td><td>A patient who can book an appointment right now</td></tr>
+      <tr><td><code>fresh@denpointment.example</code></td><td>A new account that still has to add an address and a phone number</td></tr>
+      <tr><td><code>dentist@denpointment.example</code></td><td>A dentist with appointments today, upcoming ones and holidays</td></tr>
+    </table>
+    <figure><img src="Images/login-light.png" alt="Login page"><figcaption>The login page. New visitors use “Create an account”.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>Find your way around</h3>
+    <p>The menu on the left shows what your role may use. At the bottom you find your name, the theme switch and the log out button. Messages appear in the top right corner and disappear by themselves.</p>
+    <figure><img src="Images/patient-dashboard-light.png" alt="Patient dashboard"><figcaption>The dashboard of a patient: the next appointment and shortcuts.</figcaption></figure>
+  </div></div>
+</section>
+
+<section class="chapter">
+  <h2><em>2</em>For patients</h2>
+  <p class="lead">Everything a patient does, in the order you will meet it.</p>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>Create an account</h3>
+    <p>Choose “Create an account” on the login page. Fill in your name, SSN (10 to 15 digits), email, gender, birth date and a password of at least six characters. Mistakes are shown under the field they belong to.</p>
+    <figure><img src="Images/register-light.png" alt="Registration form"><figcaption>The registration form.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>Activate your account</h3>
+    <p>After the first login the dashboard asks for an address and a phone number. The account becomes active as soon as both exist, no extra button needed.</p>
+    <figure><img src="Images/fresh-dashboard-light.png" alt="Dashboard of a new account"><figcaption>A new account: one more step to start booking.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>Fill in your profile</h3>
+    <p>Open <b>My profile</b>. Use the <b>Add</b> buttons for addresses, phone numbers and chronic diseases, the pencil to edit and the red bin to delete (the system asks to confirm). You always keep at least one address and one phone number. Email and password are changed with the two buttons at the top.</p>
+    <figure><img src="Images/profile-light.png" alt="Profile page"><figcaption>The profile with its four cards.</figcaption></figure>
+    <figure class="narrow"><img src="Images/address-form-light.png" alt="Address form"><figcaption>Adding an address.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">4</div><div>
+    <h3>Book an appointment</h3>
+    <p>Open <b>Book an appointment</b>, then (1) choose a dentist, (2) pick a day, (3) pick a time and press <b>Book appointment</b>. The clinic works 08:00 to 12:00 and 15:00 to 16:00 (the last slot starts at 16:00).</p>
+    <figure><img src="Images/book-light.png" alt="Booking page"><figcaption>The three steps of booking.</figcaption></figure>
+    <div class="note"><b>Good to know.</b> You can book only for the rest of the current month, only one upcoming appointment at a time, and not on a day the dentist is on holiday or at a time somebody else already booked.</div>
+  </div></div>
+
+  <div class="step"><div class="num">5</div><div>
+    <h3>Follow your appointments and treatments</h3>
+    <p><b>My appointments</b> lists what is coming and what happened before. For a finished visit press <b>Details</b> to see the treatment, the charge and the prescribed medicines.</p>
+    <figure><img src="Images/patient-appointments-light.png" alt="My appointments"><figcaption>Upcoming and past appointments.</figcaption></figure>
+    <figure><img src="Images/patient-treatment-light.png" alt="Treatment details"><figcaption>A treatment with its medicines.</figcaption></figure>
+  </div></div>
+</section>
+
+<section class="chapter">
+  <h2><em>3</em>For dentists</h2>
+  <p class="lead">Dentists use the “Clinic” part of the menu. They are listed in the database; there is no registration for dentists.</p>
+
+  <div class="step"><div class="num">1</div><div>
+    <h3>Start at the dashboard</h3>
+    <p>The three tiles show today's appointments, the upcoming ones and a shortcut to your holidays.</p>
+    <figure><img src="Images/dentist-dashboard-light.png" alt="Dentist dashboard"><figcaption>The dashboard of a dentist.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">2</div><div>
+    <h3>See today's appointments</h3>
+    <p>Each row shows the time, the patient and whether a treatment is already recorded. <b>Patient</b> opens the patient's profile, <b>Add treatment</b> records what you did.</p>
+    <figure><img src="Images/today-light.png" alt="Today's appointments"><figcaption>Today's appointments.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">3</div><div>
+    <h3>Record a treatment</h3>
+    <p>Type or pick the action and the complaint (the lists only suggest, you can write your own), the charge and an optional note. Treatments can only be recorded and edited on the day of the appointment.</p>
+    <figure><img src="Images/treatment-form-light.png" alt="Treatment form"><figcaption>The treatment form.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">4</div><div>
+    <h3>Add medicines</h3>
+    <p>Saving a treatment opens the medicine list. Add as many medicines as needed; the bin removes one again. The patient sees the list in their treatment details.</p>
+    <figure><img src="Images/medicines-light.png" alt="Medicines"><figcaption>Medicines of a treatment.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">5</div><div>
+    <h3>Look ahead</h3>
+    <p><b>Upcoming</b> lists everything booked after today. From each row you can open the patient profile (addresses, phone numbers, chronic diseases). You only see patients who have booked with you.</p>
+    <figure><img src="Images/upcoming-light.png" alt="Upcoming appointments"><figcaption>Upcoming appointments.</figcaption></figure>
+    <figure><img src="Images/patient-profile-light.png" alt="Patient profile"><figcaption>A patient's profile as a dentist sees it.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">6</div><div>
+    <h3>Search the treatment history</h3>
+    <p><b>Treatment history</b> shows every appointment before today with its treatment. Choose a date and press <b>Search</b> to see one day; <b>Clear</b> brings the full list back.</p>
+    <figure><img src="Images/history-light.png" alt="Treatment history"><figcaption>The history with the date search at the top right.</figcaption></figure>
+  </div></div>
+
+  <div class="step"><div class="num">7</div><div>
+    <h3>Plan your holidays</h3>
+    <p><b>Holidays</b> lists days off. Press <b>Add a holiday</b>, pick a date in the <i>next month</i> and give an optional reason. Patients cannot book you on those days.</p>
+    <figure><img src="Images/holidays-light.png" alt="Holidays"><figcaption>Upcoming and past holidays.</figcaption></figure>
+    <figure class="narrow"><img src="Images/holiday-form-light.png" alt="Add a holiday"><figcaption>Adding a holiday.</figcaption></figure>
+    <div class="note warn"><b>Limits.</b> At most three holiday days per month, only in the next month, and a holiday of the current month cannot be deleted any more.</div>
+  </div></div>
+
+  <div class="step"><div class="num">8</div><div>
+    <h3>Read the statistics</h3>
+    <p>The statistics page gives totals, the busiest dentists, the most common complaints (by gender, this month and last month), the average charge per treatment and the most expensive treatment.</p>
+    <figure><img src="Images/statistics-light.png" alt="Statistics"><figcaption>Statistics of the whole clinic.</figcaption></figure>
+  </div></div>
+</section>
+
+<section class="chapter">
+  <h2><em>4</em>The rules at a glance</h2>
+  <p class="lead">The system refuses requests that break these rules and tells you why.</p>
+  <table>
+    <tr><th>Topic</th><th>Rule</th></tr>
+    <tr><td>Activation</td><td>A person becomes a patient when the profile has at least one address and one phone number.</td></tr>
+    <tr><td>Profile</td><td>The last address and the last phone number cannot be deleted. A phone number can belong to one person only.</td></tr>
+    <tr><td>Booking</td><td>Only for the rest of the current month, only one upcoming appointment, working hours only (08–12 and 15–16), not in the past.</td></tr>
+    <tr><td>Slots</td><td>A dentist cannot have two appointments at the same time, nor on a holiday.</td></tr>
+    <tr><td>Treatments</td><td>Recorded and edited on the day of the appointment, by the dentist of that appointment. One treatment per appointment.</td></tr>
+    <tr><td>Holidays</td><td>Next month only, three days per month at most, deletable until the month begins.</td></tr>
+    <tr><td>Patient data</td><td>A dentist can open the profile of patients who have booked with them, nobody else's.</td></tr>
+    <tr><td>Security</td><td>Forms carry a CSRF token, delete actions are POST requests, passwords are stored hashed (sha256_crypt).</td></tr>
+  </table>
+</section>
+
+<section class="chapter">
+  <h2><em>5</em>Themes and small screens</h2>
+  <p class="lead">The interface follows your system theme at first. The moon or sun button in the menu switches it and remembers your choice in this browser.</p>
+  <figure style="width:78%;margin-left:auto;margin-right:auto"><img src="Images/patient-appointments-dark.png" alt="Dark theme"><figcaption>The dark theme.</figcaption></figure>
+  <p style="margin-top:6mm">On a phone the menu hides behind the button at the top right and tables turn into cards.</p>
+  <figure class="pair">
+    <div><img src="Images/patient-dashboard-mobile.png" alt="Phone: dashboard"><figcaption>Dashboard</figcaption></div>
+    <div><img src="Images/today-mobile.png" alt="Phone: today's appointments"><figcaption>Today's appointments</figcaption></div>
+  </figure>
+</section>
+
+<section class="chapter">
+  <h2><em>6</em>Troubleshooting</h2>
+  <table>
+    <tr><th>Question</th><th>Answer</th></tr>
+    <tr><td>“Your form has expired”</td><td>The page was open for a long time or the server restarted. Reload the page and send the form again.</td></tr>
+    <tr><td>I cannot book an appointment</td><td>Check that the profile has an address and a phone number, that you have no upcoming appointment and that the day is still in the current month.</td></tr>
+    <tr><td>The menu has no “Clinic” section</td><td>Only accounts that are in the dentists table see it.</td></tr>
+    <tr><td>The demo data looks old</td><td><code>main.py --demo</code> creates a fresh demo database on every start, with dates relative to today.</td></tr>
+    <tr><td>MySQL refuses the connection</td><td>Check <code>DENPOINTMENT_DB_HOST</code>, <code>_USER</code>, <code>_PASSWORD</code> and <code>_NAME</code>. The MySQL path has not been run in this fork's automated tests (they use SQLite).</td></tr>
+  </table>
+</section>
+
+</body>
+</html>
