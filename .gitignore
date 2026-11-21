@@ -1,4 +1,6 @@
-.idea/
-__pycache__/
 .venv/
+__pycache__/
+.pytest_cache/
+.idea/
 .DS_Store
+Data/
