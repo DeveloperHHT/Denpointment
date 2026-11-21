@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import post_button %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Holidays{% endblock %}
+{% block heading %}Holidays{% endblock %}
+{% block lead %}<p>Plan your days off for next month. Patients cannot book you on these days. Three days per month at most.</p>{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('dentist.add_holiday') }}">{{ icon('plus', 18) }}Add a holiday</a>{% endblock %}
+{% block content %}
+<div class="stack">
+  <section class="card flush rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('umbrella', 20) }}Upcoming</h2></div>
+    {% if upcoming %}
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Date</th><th>Reason</th><th></th></tr></thead>
+      <tbody>
+      {% for h in upcoming %}
+        <tr>
+          <td><strong>{{ h.rest_date|day }}</strong></td>
+          <td>{{ h.reason or '' }}{% if not h.reason %}<span class="muted">No reason given</span>{% endif %}</td>
+          <td><div class="actions">
+            {% if (h.rest_date.year, h.rest_date.month) > (today.year, today.month) %}
+              {{ post_button(url_for('dentist.delete_holiday', holiday_id=h.holiday_id), delete_form, 'Delete', 'trash', 'Delete the holiday on ' ~ (h.rest_date|day) ~ '?') }}
+            {% else %}<span class="badge neutral">This month</span>{% endif %}
+          </div></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+      <div class="empty">{{ icon('umbrella', 40) }}<strong>No holidays planned</strong><span>Add the days you will be away.</span></div>
+    {% endif %}
+  </section>
+  <section class="card flush rise" style="--i:2">
+    <div class="card-head"><h2>{{ icon('clock', 20) }}Past</h2></div>
+    {% if past %}
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Date</th><th>Reason</th></tr></thead>
+      <tbody>{% for h in past %}<tr><td><strong>{{ h.rest_date|day }}</strong></td><td>{{ h.reason or '' }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}
+      <div class="empty"><span>No past holidays.</span></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

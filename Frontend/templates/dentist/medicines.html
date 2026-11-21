@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field, post_button %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Medicines{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('dentist.todays_appointments') }}">{{ icon('arrow-left', 16) }}Today's appointments</a>{% endblock %}
+{% block heading %}Medicines{% endblock %}
+{% block lead %}<p>{{ patient.first_name }} {{ patient.last_name }} · {{ treatment.action|capitalize }}, {{ treatment|day }}</p>{% endblock %}
+{% block actions %}<a class="btn ghost" href="{{ url_for('dentist.edit_treatment', treatment_id=treatment.treatment_id) }}">{{ icon('edit', 18) }}Edit treatment</a>{% endblock %}
+{% block content %}
+<div class="grid cols-2">
+  <section class="card rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('pill', 20) }}Prescribed</h2></div>
+    {% if medicines %}
+      <div class="rows">
+      {% for m in medicines %}
+        <div class="row"><div class="meta">{{ icon('pill', 20) }}<div>{{ m.medicine_name }}</div></div>
+          {{ post_button(url_for('dentist.delete_medicine', treatment_id=treatment.treatment_id, medicine_id=m.medicine_id), delete_form, '', 'trash', 'Remove ' ~ m.medicine_name ~ '?', 'btn danger sm icon-only') }}</div>
+      {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">{{ icon('pill', 36) }}<strong>No medicines yet</strong><span>Add the first one on the right.</span></div>
+    {% endif %}
+  </section>
+  <section class="card rise" style="--i:2">
+    <div class="card-head"><h2>{{ icon('plus', 20) }}Add a medicine</h2></div>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      {{ field(form.medicine_name, 'pill', autofocus=true, placeholder='For example: Ibuprofen 400 mg') }}
+      <button class="btn" type="submit">{{ icon('plus', 18) }}Add medicine</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

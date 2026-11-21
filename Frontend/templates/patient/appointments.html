@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import initials %}
+{% block title %}My appointments{% endblock %}
+{% block heading %}My appointments{% endblock %}
+{% block lead %}<p>Upcoming visits and everything your dentist did before.</p>{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('patient.book') }}">{{ icon('calendar-plus', 18) }}Book an appointment</a>{% endblock %}
+{% block content %}
+<div class="stack">
+  <section class="card flush rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('calendar', 20) }}Upcoming</h2></div>
+    {% if upcoming %}
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>When</th><th>Dentist</th><th>Room</th></tr></thead>
+      <tbody>
+      {% for a in upcoming %}
+        <tr>
+          <td><div class="when"><strong>{{ a|day }}</strong><small>{{ a.hour|hour }}</small></div></td>
+          <td><div class="who"><span class="avatar">{{ initials(a.first_name, a.last_name) }}</span>Dr. {{ a.first_name }} {{ a.last_name }}</div></td>
+          <td><span class="badge neutral">Room {{ a.room }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+      <div class="empty">{{ icon('calendar', 40) }}<strong>Nothing planned</strong><span>You have no upcoming appointment.</span>
+        <a class="btn sm" href="{{ url_for('patient.book') }}">{{ icon('calendar-plus', 16) }}Book one</a></div>
+    {% endif %}
+  </section>
+
+  <section class="card flush rise" style="--i:2">
+    <div class="card-head"><h2>{{ icon('clipboard', 20) }}Past appointments</h2></div>
+    {% if past %}
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>When</th><th>Dentist</th><th>Treatment</th><th>Charge</th><th></th></tr></thead>
+      <tbody>
+      {% for a in past %}
+        <tr>
+          <td><div class="when"><strong>{{ a|day }}</strong><small>{{ a.hour|hour }}</small></div></td>
+          <td><div class="who"><span class="avatar">{{ initials(a.first_name, a.last_name) }}</span>Dr. {{ a.first_name }} {{ a.last_name }}</div></td>
+          <td>{% if a.treatment_id %}<div class="when"><strong>{{ a.action|capitalize }}</strong><small>{{ a.complaint|complaint|capitalize }}</small></div>{% else %}<span class="badge neutral">No treatment recorded</span>{% endif %}</td>
+          <td>{% if a.treatment_id %}<span class="nowrap">{{ a.charge|money }}</span>{% endif %}</td>
+          <td><div class="actions">{% if a.treatment_id %}<a class="btn sm ghost" href="{{ url_for('patient.treatment', treatment_id=a.treatment_id) }}">{{ icon('eye', 16) }}Details{% if a.medicine_count %} <span class="badge">{{ a.medicine_count }} {{ 'medicine' if a.medicine_count == 1 else 'medicines' }}</span>{% endif %}</a>{% endif %}</div></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}
+      <div class="empty">{{ icon('clipboard', 40) }}<strong>No history yet</strong><span>Your past visits will be listed here.</span></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

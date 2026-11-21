@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import initials %}
+{% block title %}Upcoming appointments{% endblock %}
+{% block heading %}Upcoming appointments{% endblock %}
+{% block lead %}<p>Everything booked after today, in order.</p>{% endblock %}
+{% block content %}
+<section class="card flush rise">
+  {% if appointments %}
+  <div class="table-wrap"><table class="table">
+    <thead><tr><th>When</th><th>Patient</th><th>Room</th><th></th></tr></thead>
+    <tbody>
+    {% for a in appointments %}
+      <tr>
+        <td><div class="when"><strong>{{ a|day }}</strong><small>{{ a.hour|hour }}</small></div></td>
+        <td><div class="who"><span class="avatar">{{ initials(a.first_name, a.last_name) }}</span>{{ a.first_name }} {{ a.last_name }}</div></td>
+        <td><span class="badge neutral">Room {{ a.room }}</span></td>
+        <td><div class="actions"><a class="btn sm ghost" href="{{ url_for('dentist.patient_profile', patient_id=a.patient_id) }}">{{ icon('user', 16) }}Patient profile</a></div></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+    <div class="empty">{{ icon('calendar', 40) }}<strong>Nothing booked yet</strong><span>New appointments will show up here.</span></div>
+  {% endif %}
+</section>
+{% endblock %}

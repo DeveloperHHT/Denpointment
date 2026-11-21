@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<div class="error-page">
+  <div>
+    <div class="code">{{ code }}</div>
+    <h1>{{ title }}</h1>
+    <p>{{ text }}</p>
+    <a class="btn" href="{{ url_for('auth.login') }}">{{ icon('home', 18) }}Back to the start</a>
+  </div>
+</div>
+{% endblock %}

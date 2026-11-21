@@ -1,0 +1,13 @@
+{% from "macros/icons.html" import icon %}
+<section class="auth-hero">
+  <a class="brand" href="{{ url_for('auth.login') }}"><span class="brand-mark">{{ icon('tooth', 22) }}</span>Denpointment</a>
+  <div>
+    <h1>Dental care, scheduled without the phone calls.</h1>
+    <p>Book a visit with your dentist, follow your treatments and keep your medical details in one place.</p>
+  </div>
+  <ul class="perks">
+    <li style="--i:0">{{ icon('calendar-plus', 22) }}Book a free slot in a few clicks</li>
+    <li style="--i:1">{{ icon('clipboard', 22) }}See your treatments and medicines afterwards</li>
+    <li style="--i:2">{{ icon('shield', 22) }}Your data stays in your own database</li>
+  </ul>
+</section>

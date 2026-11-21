@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Add a chronic disease{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('account.profile') }}">{{ icon('arrow-left', 16) }}My profile</a>{% endblock %}
+{% block heading %}Add a chronic disease{% endblock %}
+{% block lead %}<p>Tell your dentist about long-term conditions that matter for treatments.</p>{% endblock %}
+{% block content %}
+<div class="card form-card rise">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.chronic_disease, 'heart-pulse', autofocus=true, placeholder='For example: asthma') }}
+    <div class="form-actions">
+      <button class="btn" type="submit">{{ icon('check', 18) }}Add disease</button>
+      <a class="btn ghost" href="{{ url_for('account.profile') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

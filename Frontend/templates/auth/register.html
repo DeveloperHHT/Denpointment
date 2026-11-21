@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Create an account{% endblock %}
+{% block body %}
+<div class="auth">
+  {% include "auth/_hero.html" %}
+  <section class="auth-panel">
+    <button type="button" class="btn ghost icon-only auth-theme" data-theme-toggle aria-label="Switch light and dark theme">
+      <span class="for-light">{{ icon('moon', 18) }}</span><span class="for-dark">{{ icon('sun', 18) }}</span>
+    </button>
+    <div class="auth-card card rise">
+      <h2>Create your account</h2>
+      <p>After signing up, add an address and a phone number to start booking.</p>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="form-row">
+          {{ field(form.first_name, 'user', autocomplete='given-name') }}
+          {{ field(form.last_name, 'user', autocomplete='family-name') }}
+        </div>
+        {{ field(form.ssn, 'shield', inputmode='numeric', placeholder='10 to 15 digits') }}
+        {{ field(form.email, 'mail', autocomplete='email', placeholder='you@example.com') }}
+        <div class="form-row">
+          {{ field(form.gender) }}
+          {{ field(form.birth_date, type='date', max=today.isoformat()) }}
+        </div>
+        <div class="form-row">
+          {{ field(form.password, 'lock', autocomplete='new-password', hint='At least 6 characters.') }}
+          {{ field(form.confirm, 'lock', autocomplete='new-password') }}
+        </div>
+        <button class="btn block" type="submit">{{ icon('check', 18) }}Create account</button>
+      </form>
+      <p class="auth-switch">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+    </div>
+  </section>
+</div>
+{% endblock %}

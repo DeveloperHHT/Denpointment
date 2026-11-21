@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Log in{% endblock %}
+{% block body %}
+<div class="auth">
+  {% include "auth/_hero.html" %}
+  <section class="auth-panel">
+    <button type="button" class="btn ghost icon-only auth-theme" data-theme-toggle aria-label="Switch light and dark theme">
+      <span class="for-light">{{ icon('moon', 18) }}</span><span class="for-dark">{{ icon('sun', 18) }}</span>
+    </button>
+    <div class="auth-card card rise">
+      <h2>Welcome back</h2>
+      <p>Log in to see your appointments.</p>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {{ field(form.email, 'mail', autocomplete='email', placeholder='you@example.com', autofocus=true) }}
+        {{ field(form.password, 'lock', autocomplete='current-password', placeholder='Your password') }}
+        <button class="btn block" type="submit">{{ icon('login', 18) }}Log in</button>
+      </form>
+      <p class="auth-switch">New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+      {% if config.SETTINGS.backend == 'sqlite' %}
+      <div class="demo-box">Demo mode. Try <code>patient@denpointment.example</code> or <code>dentist@denpointment.example</code> with the password <code>demo1234</code>.</div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

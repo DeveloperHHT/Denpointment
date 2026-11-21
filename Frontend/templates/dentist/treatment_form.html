@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field, initials %}
+{% from "macros/icons.html" import icon %}
+{% block title %}{{ 'Edit treatment' if editing else 'Add a treatment' }}{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('dentist.todays_appointments') }}">{{ icon('arrow-left', 16) }}Today's appointments</a>{% endblock %}
+{% block heading %}{{ 'Edit treatment' if editing else 'Add a treatment' }}{% endblock %}
+{% block lead %}<p>{{ patient.first_name }} {{ patient.last_name }} · {{ appointment|day }} at {{ appointment.hour|hour }}</p>{% endblock %}
+{% block content %}
+<div class="card form-card rise">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.action, 'stethoscope', list='action-options', autofocus=true, autocomplete='off') }}
+    <datalist id="action-options">{% for item in actions %}<option value="{{ item }}">{% endfor %}</datalist>
+    {{ field(form.complaint, 'clipboard', list='complaint-options', autocomplete='off') }}
+    <datalist id="complaint-options">{% for item in complaints %}<option value="{{ item }}">{% endfor %}</datalist>
+    <div class="form-row">
+      {{ field(form.charge, 'coins', inputmode='numeric', min='0') }}
+      {{ field(form.description, 'edit') }}
+    </div>
+    <div class="form-actions">
+      <button class="btn" type="submit">{{ icon('check', 18) }}Save treatment</button>
+      <a class="btn ghost" href="{{ url_for('dentist.todays_appointments') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

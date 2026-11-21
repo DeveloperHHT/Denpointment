@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}{{ 'Edit address' if editing else 'Add an address' }}{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('account.profile') }}">{{ icon('arrow-left', 16) }}My profile</a>{% endblock %}
+{% block heading %}{{ 'Edit address' if editing else 'Add an address' }}{% endblock %}
+{% block content %}
+<div class="card form-card rise">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="form-row">
+      {{ field(form.city, 'map-pin', autofocus=true) }}
+      {{ field(form.zip_code, 'map-pin', inputmode='numeric') }}
+    </div>
+    {{ field(form.street, 'home') }}
+    <div class="form-actions">
+      <button class="btn" type="submit">{{ icon('check', 18) }}{{ 'Save changes' if editing else 'Add address' }}</button>
+      <a class="btn ghost" href="{{ url_for('account.profile') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

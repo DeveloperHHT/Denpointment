@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Treatment{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('patient.appointments') }}">{{ icon('arrow-left', 16) }}My appointments</a>{% endblock %}
+{% block heading %}{{ treatment.action|capitalize }}{% endblock %}
+{% block lead %}<p>{{ treatment|day }} at {{ treatment.hour|hour }} with Dr. {{ dentist.first_name }} {{ dentist.last_name }}</p>{% endblock %}
+{% block content %}
+<div class="grid cols-2">
+  <section class="card rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('clipboard', 20) }}What was done</h2></div>
+    <dl class="kv">
+      <dt>Complaint</dt><dd>{{ treatment.complaint|complaint|capitalize }}</dd>
+      <dt>Treatment</dt><dd>{{ treatment.action|capitalize }}</dd>
+      <dt>Charge</dt><dd>{{ treatment.charge|money }}</dd>
+      <dt>Note</dt><dd>{{ treatment.description or 'None' }}</dd>
+    </dl>
+  </section>
+  <section class="card rise" style="--i:2">
+    <div class="card-head"><h2>{{ icon('pill', 20) }}Medicines</h2></div>
+    {% if medicines %}
+      <div class="rows">{% for m in medicines %}<div class="row"><div class="meta">{{ icon('pill', 20) }}<div>{{ m.medicine_name }}</div></div></div>{% endfor %}</div>
+    {% else %}
+      <div class="empty">{{ icon('pill', 36) }}<strong>No medicines</strong><span>Your dentist did not prescribe any.</span></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

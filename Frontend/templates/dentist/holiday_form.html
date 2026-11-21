@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Add a holiday{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('dentist.holidays') }}">{{ icon('arrow-left', 16) }}Holidays</a>{% endblock %}
+{% block heading %}Add a holiday{% endblock %}
+{% block lead %}<p>Holidays have to be in the next month.</p>{% endblock %}
+{% block content %}
+<div class="card form-card rise">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.date, 'calendar', autofocus=true) }}
+    {{ field(form.reason, 'edit', placeholder='For example: Family visit') }}
+    <div class="form-actions">
+      <button class="btn" type="submit">{{ icon('check', 18) }}Add holiday</button>
+      <a class="btn ghost" href="{{ url_for('dentist.holidays') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

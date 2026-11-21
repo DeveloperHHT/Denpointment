@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% macro bars(rows) -%}
+  {% set top = rows[0].magnitude if rows else 1 %}
+  <div class="bars">
+  {% for r in rows %}
+    <div><div class="bar-label"><span>Dr. {{ r.first_name }} {{ r.last_name }}</span><span>{{ r.magnitude }}</span></div>
+      <div class="bar"><i style="--w: {{ (r.magnitude / top * 100)|round|int }}%"></i></div></div>
+  {% endfor %}
+  </div>
+{%- endmacro %}
+{% block title %}Statistics{% endblock %}
+{% block heading %}Statistics{% endblock %}
+{% block lead %}<p>An overview of the whole clinic.</p>{% endblock %}
+{% block content %}
+<div class="stack">
+  <div class="grid cols-4">
+    <div class="card hover stat rise" style="--i:1"><span class="stat-icon">{{ icon('users', 24) }}</span><div><b>{{ totals.patients }}</b><span>Patients</span></div></div>
+    <div class="card hover stat rise" style="--i:2"><span class="stat-icon indigo">{{ icon('stethoscope', 24) }}</span><div><b>{{ totals.dentists }}</b><span>Dentists</span></div></div>
+    <div class="card hover stat rise" style="--i:3"><span class="stat-icon blue">{{ icon('calendar', 24) }}</span><div><b>{{ totals.appointments }}</b><span>Appointments</span></div></div>
+    <div class="card hover stat rise" style="--i:4"><span class="stat-icon amber">{{ icon('clipboard', 24) }}</span><div><b>{{ totals.treatments }}</b><span>Treatments</span></div></div>
+  </div>
+
+  <div class="grid cols-2">
+    <section class="card rise" style="--i:5">
+      <div class="card-head"><h2>{{ icon('calendar', 20) }}Dentists with the most appointments</h2></div>
+      {% if busiest %}{{ bars(busiest) }}{% else %}<p class="muted">No data yet.</p>{% endif %}
+    </section>
+    <section class="card rise" style="--i:6">
+      <div class="card-head"><h2>{{ icon('clipboard', 20) }}Dentists with the most treatments</h2></div>
+      {% if most_treatments %}{{ bars(most_treatments) }}{% else %}<p class="muted">No data yet.</p>{% endif %}
+    </section>
+  </div>
+
+  <div class="grid cols-3">
+    <section class="card rise" style="--i:7">
+      <div class="card-head"><h2>{{ icon('heart-pulse', 20) }}Most common complaint</h2></div>
+      <dl class="kv">
+        <dt>Female patients</dt><dd>{{ top_complaint_female.complaint|complaint|capitalize if top_complaint_female else 'No data' }}</dd>
+        <dt>Male patients</dt><dd>{{ top_complaint_male.complaint|complaint|capitalize if top_complaint_male else 'No data' }}</dd>
+        <dt>This month</dt><dd>{{ top_complaint_this_month.complaint|complaint|capitalize if top_complaint_this_month else 'No data' }}</dd>
+        <dt>Last month</dt><dd>{{ top_complaint_last_month.complaint|complaint|capitalize if top_complaint_last_month else 'No data' }}</dd>
+      </dl>
+    </section>
+    <section class="card rise" style="--i:8">
+      <div class="card-head"><h2>{{ icon('coins', 20) }}Average charge by treatment</h2></div>
+      <dl class="kv">
+      {% for item in average_charges %}<dt>{{ item.action|capitalize }}</dt><dd>{{ item.average|money if item.average is not none else 'No data' }}</dd>{% endfor %}
+      </dl>
+    </section>
+    <section class="card rise" style="--i:9">
+      <div class="card-head"><h2>{{ icon('sparkles', 20) }}Most expensive treatment</h2></div>
+      {% if most_expensive %}
+        <div class="big-number">{{ most_expensive.charge|money }}</div>
+        <p>{{ most_expensive.action|capitalize }} · {{ most_expensive|day }}</p>
+        <p class="muted">Dr. {{ most_expensive.dentist_first_name }} {{ most_expensive.dentist_last_name }} for {{ most_expensive.patient_first_name }} {{ most_expensive.patient_last_name }}</p>
+      {% else %}<p class="muted">No data yet.</p>{% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

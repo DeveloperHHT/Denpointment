@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% block title %}{{ patient.first_name }} {{ patient.last_name }}{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('dentist.upcoming_appointments') }}">{{ icon('arrow-left', 16) }}Upcoming appointments</a>{% endblock %}
+{% block heading %}{{ patient.first_name }} {{ patient.last_name }}{% endblock %}
+{% block lead %}<p>Patient profile. You can see it because this patient has booked with you.</p>{% endblock %}
+{% block content %}
+<div class="grid cols-2">
+  <section class="card rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('user', 20) }}Personal details</h2></div>
+    <dl class="kv">
+      <dt>Email</dt><dd>{{ patient.email }}</dd>
+      <dt>Gender</dt><dd>{{ patient.gender|capitalize }}</dd>
+      <dt>Birth date</dt><dd>{{ patient.birth_date|day if patient.birth_date else '' }}</dd>
+    </dl>
+  </section>
+  <section class="card rise" style="--i:2">
+    <div class="card-head"><h2>{{ icon('heart-pulse', 20) }}Chronic diseases</h2></div>
+    {% if chronic_diseases %}<div class="chips">{% for d in chronic_diseases %}<span class="chip" style="padding-right:14px">{{ d.chronic_disease }}</span>{% endfor %}</div>
+    {% else %}<p class="muted">None listed.</p>{% endif %}
+  </section>
+  <section class="card rise" style="--i:3">
+    <div class="card-head"><h2>{{ icon('map-pin', 20) }}Addresses</h2></div>
+    <div class="rows">{% for a in addresses %}<div class="row"><div class="meta">{{ icon('map-pin', 20) }}<div>{{ a.street }}, {{ a.city }}<small>ZIP {{ a.zip_code }}</small></div></div></div>{% endfor %}</div>
+  </section>
+  <section class="card rise" style="--i:4">
+    <div class="card-head"><h2>{{ icon('phone', 20) }}Phone numbers</h2></div>
+    <div class="rows">{% for p in phones %}<div class="row"><div class="meta">{{ icon('phone', 20) }}<div>{{ p.contact_number }}</div></div></div>{% endfor %}</div>
+  </section>
+</div>
+{% endblock %}

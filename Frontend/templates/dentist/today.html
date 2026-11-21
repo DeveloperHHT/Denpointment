@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import initials %}
+{% block title %}Today's appointments{% endblock %}
+{% block heading %}Today's appointments{% endblock %}
+{% block lead %}<p>{{ today|day }}. Record a treatment after each visit.</p>{% endblock %}
+{% block content %}
+<section class="card flush rise">
+  {% if appointments %}
+  <div class="table-wrap"><table class="table">
+    <thead><tr><th>Time</th><th>Patient</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for a in appointments %}
+      <tr>
+        <td><strong>{{ a.hour|hour }}</strong></td>
+        <td><div class="who"><span class="avatar">{{ initials(a.first_name, a.last_name) }}</span>{{ a.first_name }} {{ a.last_name }}</div></td>
+        <td>{% if a.treatment_id %}<span class="badge success">{{ icon('check', 14) }}{{ a.action|capitalize }}</span>{% else %}<span class="badge warning">Waiting</span>{% endif %}</td>
+        <td><div class="actions">
+          <a class="btn sm ghost" href="{{ url_for('dentist.patient_profile', patient_id=a.patient_id) }}">{{ icon('user', 16) }}Patient</a>
+          {% if a.treatment_id %}
+            <a class="btn sm ghost" href="{{ url_for('dentist.edit_treatment', treatment_id=a.treatment_id) }}">{{ icon('edit', 16) }}Edit</a>
+            <a class="btn sm" href="{{ url_for('dentist.medicines', treatment_id=a.treatment_id) }}">{{ icon('pill', 16) }}Medicines</a>
+          {% else %}
+            <a class="btn sm" href="{{ url_for('dentist.add_treatment', appointment_id=a.appointment_id) }}">{{ icon('plus', 16) }}Add treatment</a>
+          {% endif %}
+        </div></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+    <div class="empty">{{ icon('stethoscope', 40) }}<strong>A quiet day</strong><span>There are no appointments today.</span></div>
+  {% endif %}
+</section>
+{% endblock %}

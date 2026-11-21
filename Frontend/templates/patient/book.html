@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import initials %}
+{% block title %}Book an appointment{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('patient.appointments') }}">{{ icon('arrow-left', 16) }}My appointments</a>{% endblock %}
+{% block heading %}Book an appointment{% endblock %}
+{% block lead %}<p>You can book for the rest of this month ({{ first_day|day }} to {{ last_day|day }}). One upcoming appointment at a time.</p>{% endblock %}
+{% block content %}
+<form method="post" novalidate class="stack">
+  {{ form.hidden_tag() }}
+  <section class="card rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('stethoscope', 20) }}1. Choose a dentist</h2></div>
+    <div class="choice-grid">
+      {% for d in dentists %}
+      <label class="choice">
+        <input type="radio" name="dentist" value="{{ d.dentist_id }}" {% if form.dentist.data == d.dentist_id %}checked{% endif %} required>
+        <span class="choice-body"><span class="avatar">{{ initials(d.first_name, d.last_name) }}</span><span><strong>Dr. {{ d.first_name }} {{ d.last_name }}</strong><small>Room {{ d.room_number }}</small></span></span>
+      </label>
+      {% endfor %}
+    </div>
+    {% for message in form.dentist.errors %}<p class="error">{{ message }}</p>{% endfor %}
+  </section>
+
+  <div class="grid cols-2">
+    <section class="card rise" style="--i:2">
+      <div class="card-head"><h2>{{ icon('calendar', 20) }}2. Pick a day</h2></div>
+      <div class="field{% if form.date.errors %} has-error{% endif %}">
+        <div class="control">{{ icon('calendar', 18) }}{{ form.date(class_='input', min=first_day.isoformat(), max=last_day.isoformat(), required=true) }}</div>
+        {% for message in form.date.errors %}<p class="error">{{ message }}</p>{% endfor %}
+        <p class="hint">The clinic is closed for lunch between 13:00 and 15:00.</p>
+      </div>
+    </section>
+    <section class="card rise" style="--i:3">
+      <div class="card-head"><h2>{{ icon('clock', 20) }}3. Pick a time</h2></div>
+      <div class="hours">
+        {% for value, label in form.hour.choices %}
+        <label class="choice"><input type="radio" name="hour" value="{{ value }}" {% if form.hour.data == value %}checked{% endif %} required><span class="choice-body">{{ label }}</span></label>
+        {% endfor %}
+      </div>
+      {% for message in form.hour.errors %}<p class="error">{{ message }}</p>{% endfor %}
+    </section>
+  </div>
+  <div class="form-actions">
+    <button class="btn" type="submit">{{ icon('calendar-check', 18) }}Book appointment</button>
+    <a class="btn ghost" href="{{ url_for('patient.appointments') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

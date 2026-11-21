@@ -1,0 +1,25 @@
+{% from "macros/icons.html" import icon %}
+
+{# One labelled input with its icon, hint and error messages. Extra keyword arguments become HTML attributes. #}
+{% macro field(f, icon_name=None, hint=None) -%}
+<div class="field{% if f.errors %} has-error{% endif %}">
+  <label for="{{ f.id }}">{{ f.label.text }}</label>
+  <div class="control">
+    {% if icon_name %}{{ icon(icon_name, 18) }}{% endif %}
+    {{ f(class_="input", **kwargs) }}
+  </div>
+  {% if hint %}<p class="hint">{{ hint }}</p>{% endif %}
+  {% for message in f.errors %}<p class="error">{{ message }}</p>{% endfor %}
+</div>
+{%- endmacro %}
+
+{# A button that posts a hidden form, with an optional confirm dialog. #}
+{% macro post_button(url, form, label, icon_name="trash", confirm=None, class="btn danger sm", name=None, value=None) -%}
+<form class="inline-form" method="post" action="{{ url }}"{% if confirm %} data-confirm="{{ confirm }}"{% endif %}>
+  {{ form.hidden_tag() }}
+  {% if name %}<input type="hidden" name="{{ name }}" value="{{ value }}">{% endif %}
+  <button type="submit" class="{{ class }}">{{ icon(icon_name, 16) }}<span>{{ label }}</span></button>
+</form>
+{%- endmacro %}
+
+{% macro initials(first, last) -%}{{ (first[:1] ~ last[:1])|upper }}{%- endmacro %}

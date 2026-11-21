@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import post_button %}
+{% block title %}My profile{% endblock %}
+{% block heading %}My profile{% endblock %}
+{% block lead %}<p>Your personal details and the contact information your dentist can see.</p>{% endblock %}
+{% block actions %}
+  <a class="btn ghost" href="{{ url_for('account.change_email') }}">{{ icon('mail', 18) }}Change email</a>
+  <a class="btn ghost" href="{{ url_for('account.change_password') }}">{{ icon('lock', 18) }}Change password</a>
+{% endblock %}
+{% block content %}
+{% if not current_user.is_patient and not current_user.is_dentist %}
+  <div class="notice warning rise">{{ icon('info', 20) }}<span>Add at least one address and one phone number. Your account becomes active when both exist, then you can book appointments.</span></div>
+{% endif %}
+<div class="grid cols-2">
+  <section class="card rise" style="--i:1">
+    <div class="card-head"><h2>{{ icon('user', 20) }}Personal details</h2></div>
+    <dl class="kv">
+      <dt>Name</dt><dd>{{ person.first_name }} {{ person.last_name }}</dd>
+      <dt>Email</dt><dd>{{ person.email }}</dd>
+      <dt>SSN</dt><dd>{{ person.ssn }}</dd>
+      <dt>Gender</dt><dd>{{ person.gender|capitalize }}</dd>
+      <dt>Birth date</dt><dd>{{ person.birth_date|day if person.birth_date else '' }}</dd>
+    </dl>
+  </section>
+
+  <section class="card rise" style="--i:2">
+    <div class="card-head"><h2>{{ icon('heart-pulse', 20) }}Chronic diseases</h2>
+      <a class="btn sm ghost" href="{{ url_for('account.add_chronic_disease') }}">{{ icon('plus', 16) }}Add</a></div>
+    {% if chronic_diseases %}
+      <div class="chips">
+        {% for disease in chronic_diseases %}
+          <span class="chip">{{ disease.chronic_disease }}
+            <form method="post" action="{{ url_for('account.delete_chronic_disease') }}" data-confirm="Remove {{ disease.chronic_disease }} from your profile?">
+              {{ delete_form.hidden_tag() }}
+              <input type="hidden" name="chronic_disease" value="{{ disease.chronic_disease }}">
+              <button type="submit" aria-label="Remove {{ disease.chronic_disease }}">{{ icon('x', 14) }}</button>
+            </form>
+          </span>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">Nothing listed. Add a disease if your dentist should know about it.</p>
+    {% endif %}
+  </section>
+
+  <section class="card rise" style="--i:3">
+    <div class="card-head"><h2>{{ icon('map-pin', 20) }}Addresses</h2>
+      <a class="btn sm ghost" href="{{ url_for('account.add_address') }}">{{ icon('plus', 16) }}Add</a></div>
+    {% if addresses %}
+      <div class="rows">
+        {% for address in addresses %}
+          <div class="row">
+            <div class="meta">{{ icon('map-pin', 20) }}<div>{{ address.street }}, {{ address.city }}<small>ZIP {{ address.zip_code }}</small></div></div>
+            <div class="page-actions">
+              <a class="btn sm ghost icon-only" href="{{ url_for('account.edit_address', address_id=address.address_id) }}" aria-label="Edit address" title="Edit">{{ icon('edit', 16) }}</a>
+              {{ post_button(url_for('account.delete_address', address_id=address.address_id), delete_form, '', 'trash', 'Delete this address?', 'btn danger sm icon-only') }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">{{ icon('map-pin', 36) }}<strong>No address yet</strong><span>Your dentist needs at least one address.</span></div>
+    {% endif %}
+  </section>
+
+  <section class="card rise" style="--i:4">
+    <div class="card-head"><h2>{{ icon('phone', 20) }}Phone numbers</h2>
+      <a class="btn sm ghost" href="{{ url_for('account.add_phone') }}">{{ icon('plus', 16) }}Add</a></div>
+    {% if phones %}
+      <div class="rows">
+        {% for phone in phones %}
+          <div class="row">
+            <div class="meta">{{ icon('phone', 20) }}<div>{{ phone.contact_number }}</div></div>
+            <div class="page-actions">
+              <a class="btn sm ghost icon-only" href="{{ url_for('account.edit_phone', number=phone.contact_number) }}" aria-label="Edit phone number" title="Edit">{{ icon('edit', 16) }}</a>
+              {{ post_button(url_for('account.delete_phone', number=phone.contact_number), delete_form, '', 'trash', 'Delete this phone number?', 'btn danger sm icon-only') }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">{{ icon('phone', 36) }}<strong>No phone number yet</strong><span>Add one so the clinic can reach you.</span></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

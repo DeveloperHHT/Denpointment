@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import initials %}
+{% block title %}Treatment history{% endblock %}
+{% block heading %}Treatment history{% endblock %}
+{% block lead %}<p>Appointments before today and what was done.</p>{% endblock %}
+{% block actions %}
+<form method="get" class="page-actions" action="{{ url_for('dentist.history') }}">
+  <div class="control">{{ icon('search', 18) }}<input class="input" type="date" name="date" value="{{ searched.isoformat() if searched else '' }}" aria-label="Search by date" max="{{ today.isoformat() }}"></div>
+  <button class="btn" type="submit">Search</button>
+  {% if searched %}<a class="btn ghost" href="{{ url_for('dentist.history') }}">Clear</a>{% endif %}
+</form>
+{% endblock %}
+{% block content %}
+{% if form.date.errors and request.args.get('date') %}<div class="notice warning">{{ icon('alert', 20) }}<span>{{ form.date.errors[0] }}</span></div>{% endif %}
+<section class="card flush rise">
+  {% if appointments %}
+  <div class="table-wrap"><table class="table">
+    <thead><tr><th>When</th><th>Patient</th><th>Treatment</th><th>Charge</th><th></th></tr></thead>
+    <tbody>
+    {% for a in appointments %}
+      <tr>
+        <td><div class="when"><strong>{{ a|day }}</strong><small>{{ a.hour|hour }}</small></div></td>
+        <td><div class="who"><span class="avatar">{{ initials(a.first_name, a.last_name) }}</span>{{ a.first_name }} {{ a.last_name }}</div></td>
+        <td>{% if a.treatment_id %}<div class="when"><strong>{{ a.action|capitalize }}</strong><small>{{ a.complaint|complaint|capitalize }}</small></div>{% else %}<span class="badge neutral">No treatment recorded</span>{% endif %}</td>
+        <td>{% if a.treatment_id %}<span class="nowrap">{{ a.charge|money }}</span>{% endif %}</td>
+        <td><div class="actions">
+          <a class="btn sm ghost" href="{{ url_for('dentist.patient_profile', patient_id=a.patient_id) }}">{{ icon('user', 16) }}Patient</a>
+          {% if a.treatment_id %}<a class="btn sm ghost" href="{{ url_for('dentist.medicines', treatment_id=a.treatment_id) }}">{{ icon('pill', 16) }}{{ a.medicine_count }}</a>{% endif %}
+        </div></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+    <div class="empty">{{ icon('clipboard', 40) }}<strong>{{ 'No appointments on that day' if searched else 'No history yet' }}</strong><span>Nothing to show here.</span></div>
+  {% endif %}
+</section>
+{% endblock %}

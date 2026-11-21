@@ -1,0 +1,15 @@
+{% from "macros/icons.html" import icon %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="toasts" role="status" aria-live="polite">
+  {% for category, message in messages %}
+    {% set kind = category if category in ('success', 'danger', 'warning') else 'info' %}
+    <div class="toast {{ kind }}">
+      {{ icon({'success': 'check', 'danger': 'alert', 'warning': 'alert', 'info': 'info'}[kind], 20) }}
+      <p>{{ message }}</p>
+      <button type="button" aria-label="Close">{{ icon('x', 16) }}</button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}

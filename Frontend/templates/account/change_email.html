@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}Change email{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('account.profile') }}">{{ icon('arrow-left', 16) }}My profile</a>{% endblock %}
+{% block heading %}Change email{% endblock %}
+{% block lead %}<p>Your new email is used to log in. Confirm with your password.</p>{% endblock %}
+{% block content %}
+<div class="card form-card rise">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.email, 'mail', autocomplete='email', autofocus=true) }}
+    {{ field(form.password, 'lock', autocomplete='current-password') }}
+    <div class="form-actions">
+      <button class="btn" type="submit">{{ icon('check', 18) }}Save email</button>
+      <a class="btn ghost" href="{{ url_for('account.profile') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

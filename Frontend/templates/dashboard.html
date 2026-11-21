@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/forms.html" import initials %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Hello, {{ current_user.full_name.split()[0] }}{% endblock %}
+{% block lead %}<p>{{ today|day }} · here is what is going on.</p>{% endblock %}
+{% block content %}
+<div class="stack">
+  {% if not current_user.is_patient and not current_user.is_dentist %}
+    <div class="card hero-card rise">
+      <h2>One more step to start booking</h2>
+      <p>Add at least one address and one phone number to your profile. Your account becomes active as soon as both are there.</p>
+      <a class="btn light" href="{{ url_for('account.profile') }}">{{ icon('user', 18) }}Open my profile</a>
+    </div>
+  {% endif %}
+
+  {% if current_user.is_patient %}
+    {% if next_appointment %}
+      <div class="card hero-card rise">
+        <h2>Your next appointment</h2>
+        <p><strong>{{ next_appointment|day }}</strong> at <strong>{{ next_appointment.hour|hour }}</strong> with Dr. {{ next_appointment.first_name }} {{ next_appointment.last_name }}, room {{ next_appointment.room }}.</p>
+        <a class="btn light" href="{{ url_for('patient.appointments') }}">{{ icon('calendar-check', 18) }}See my appointments</a>
+      </div>
+    {% else %}
+      <div class="card hero-card rise">
+        <h2>No appointment yet</h2>
+        <p>Choose a dentist and a time that suits you.</p>
+        <a class="btn light" href="{{ url_for('patient.book') }}">{{ icon('calendar-plus', 18) }}Book an appointment</a>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if current_user.is_dentist %}
+    <div class="grid cols-3">
+      <a class="card hover rise stat" style="--i:1" href="{{ url_for('dentist.todays_appointments') }}">
+        <span class="stat-icon">{{ icon('stethoscope', 24) }}</span><div><b>{{ today_count }}</b><span>Appointments today</span></div>
+      </a>
+      <a class="card hover rise stat" style="--i:2" href="{{ url_for('dentist.upcoming_appointments') }}">
+        <span class="stat-icon indigo">{{ icon('calendar', 24) }}</span><div><b>{{ upcoming_count }}</b><span>Upcoming appointments</span></div>
+      </a>
+      <a class="card hover rise stat" style="--i:3" href="{{ url_for('dentist.holidays') }}">
+        <span class="stat-icon amber">{{ icon('umbrella', 24) }}</span><div><b>Holidays</b><span>Plan your days off</span></div>
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="grid cols-3">
+    {% if current_user.is_patient %}
+      <a class="card hover rise stat" style="--i:2" href="{{ url_for('patient.book') }}"><span class="stat-icon">{{ icon('calendar-plus', 24) }}</span><div><b style="font-size:17px">Book</b><span>Find a free slot</span></div></a>
+      <a class="card hover rise stat" style="--i:3" href="{{ url_for('patient.appointments') }}"><span class="stat-icon blue">{{ icon('clipboard', 24) }}</span><div><b style="font-size:17px">History</b><span>Treatments and medicines</span></div></a>
+    {% endif %}
+    <a class="card hover rise stat" style="--i:4" href="{{ url_for('account.profile') }}"><span class="stat-icon indigo">{{ icon('user', 24) }}</span><div><b style="font-size:17px">Profile</b><span>Address, phone, health</span></div></a>
+  </div>
+</div>
+{% endblock %}

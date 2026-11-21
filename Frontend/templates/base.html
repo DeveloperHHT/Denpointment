@@ -1,0 +1,93 @@
+{% from "macros/icons.html" import icon %}
+{% macro nav_item(endpoint, label, icon_name, prefix=None) -%}
+<a class="nav-link{% if request.endpoint == endpoint or (prefix and request.endpoint and request.endpoint.startswith(prefix)) %} active{% endif %}" href="{{ url_for(endpoint) }}">
+  {{ icon(icon_name, 20) }}<span>{{ label }}</span>
+</a>
+{%- endmacro %}
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Denpointment{% endblock %} · Denpointment</title>
+  <meta name="description" content="Denpointment, a dentist appointment system.">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <script src="{{ url_for('static', filename='js/theme-init.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+{% block body %}
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Main menu">
+    <a class="brand" href="{{ url_for('auth.dashboard') }}">
+      <span class="brand-mark">{{ icon('tooth', 22) }}</span>Denpointment
+    </a>
+    <nav class="nav">
+      {{ nav_item('auth.dashboard', 'Dashboard', 'home') }}
+      {% if current_user.is_patient %}
+        <span class="nav-label">Appointments</span>
+        {{ nav_item('patient.appointments', 'My appointments', 'calendar-check', 'patient.treatment') }}
+        {{ nav_item('patient.book', 'Book an appointment', 'calendar-plus') }}
+      {% endif %}
+      {% if current_user.is_dentist %}
+        <span class="nav-label">Clinic</span>
+        {{ nav_item('dentist.todays_appointments', "Today's appointments", 'stethoscope') }}
+        {{ nav_item('dentist.upcoming_appointments', 'Upcoming', 'calendar') }}
+        {{ nav_item('dentist.history', 'Treatment history', 'clipboard', 'dentist.medicines') }}
+        {{ nav_item('dentist.holidays', 'Holidays', 'umbrella', 'dentist.add_holiday') }}
+        {{ nav_item('dentist.statistics', 'Statistics', 'bar-chart') }}
+      {% endif %}
+      <span class="nav-label">Account</span>
+      {{ nav_item('account.profile', 'My profile', 'user', 'account.') }}
+    </nav>
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="avatar">{{ current_user.full_name.split()[0][:1] }}{{ current_user.full_name.split()[-1][:1] }}</span>
+        <div><strong>{{ current_user.full_name }}</strong>
+          <small>{% if current_user.is_dentist %}Dentist{% elif current_user.is_patient %}Patient{% else %}New account{% endif %}</small></div>
+      </div>
+      <div class="foot-actions">
+        <button type="button" class="btn ghost icon-only" data-theme-toggle aria-label="Switch light and dark theme" title="Switch theme">
+          <span class="for-light">{{ icon('moon', 18) }}</span><span class="for-dark">{{ icon('sun', 18) }}</span>
+        </button>
+        <form method="post" action="{{ url_for('auth.logout') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn ghost">{{ icon('logout', 18) }}Log out</button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <a class="brand" href="{{ url_for('auth.dashboard') }}"><span class="brand-mark">{{ icon('tooth', 20) }}</span>Denpointment</a>
+      <button type="button" class="btn ghost icon-only" data-menu-toggle aria-label="Open the menu">{{ icon('menu', 22) }}</button>
+    </header>
+    <main class="content">
+      <div class="page-head rise">
+        <div>
+          {% block crumb %}{% endblock %}
+          <h1>{% block heading %}{% endblock %}</h1>
+          {% block lead %}{% endblock %}
+        </div>
+        <div class="page-actions">{% block actions %}{% endblock %}</div>
+      </div>
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">Denpointment {{ app_version }} · a fork of Tzesh/Denpointment, revised</footer>
+  </div>
+</div>
+{% endblock %}
+
+{% include "partials/toasts.html" %}
+<dialog class="dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+  <h2 id="confirm-title">Are you sure?</h2>
+  <p data-confirm-text></p>
+  <div class="form-actions">
+    <button type="button" class="btn ghost" data-confirm-no>Cancel</button>
+    <button type="button" class="btn danger" data-confirm-yes>Yes, continue</button>
+  </div>
+</dialog>
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

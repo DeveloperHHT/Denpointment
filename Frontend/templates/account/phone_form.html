@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import field %}
+{% from "macros/icons.html" import icon %}
+{% block title %}{{ 'Edit phone number' if editing else 'Add a phone number' }}{% endblock %}
+{% block crumb %}<a class="crumb" href="{{ url_for('account.profile') }}">{{ icon('arrow-left', 16) }}My profile</a>{% endblock %}
+{% block heading %}{{ 'Edit phone number' if editing else 'Add a phone number' }}{% endblock %}
+{% block content %}
+<div class="card form-card rise">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.contact_number, 'phone', inputmode='tel', autofocus=true, hint='Digits only, 10 to 15 characters.') }}
+    <div class="form-actions">
+      <button class="btn" type="submit">{{ icon('check', 18) }}{{ 'Save changes' if editing else 'Add number' }}</button>
+      <a class="btn ghost" href="{{ url_for('account.profile') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
