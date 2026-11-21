@@ -1,6 +1,6 @@
 # Denpointment
 
-> **This is a fork.** The application was written by [Uğur Dindar (Tzesh)](https://github.com/Tzesh) and the original lives at [Tzesh/Denpointment](https://github.com/Tzesh/Denpointment). The system, its database and its idea are his. This fork reorganises the code and revises the interface (see [What changed in this fork](#what-changed-in-this-fork)). The upstream repository has no licence file, so no licence is granted here beyond what GitHub's terms allow for forks.
+> Denpointment started from the dentist appointment application by [Uğur Dindar (Tzesh)](https://github.com/Tzesh/Denpointment) and has been reworked since: new structure, new interface, tests and a user guide (see [What changed](#what-changed)). The original repository has no licence file.
 
 A dentist appointment system written in Python with Flask. Patients register, add their contact data and book appointments; dentists see their day, record treatments and medicines, plan holidays and read statistics.
 
@@ -99,7 +99,7 @@ Requests go routes → services → repositories → database. Services raise a 
 
 The suite (about 80 tests) runs against SQLite with a fixed clock: login and registration, profile rules, booking rules, holidays, treatments and medicines, role guards, CSRF, statistics and that every page opens.
 
-## What changed in this fork
+## What changed
 
 - **Structure:** the single `denpointment.py` is split into an application factory, blueprints, services and repositories; settings and the secret key come from environment variables.
 - **Interface:** rebuilt without the bundled Bootstrap: own CSS with a light and a dark theme, responsive layout (tables become cards on phones), animations, inline icons, confirm dialogs, toasts. No external CDN or font is loaded.
