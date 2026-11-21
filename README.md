@@ -1,4 +1,7 @@
 # Denpointment
+
+> **This is a fork.** The application was written by [Uğur Dindar (Tzesh)](https://github.com/Tzesh) and the original lives at [Tzesh/Denpointment](https://github.com/Tzesh/Denpointment). All the credit for the system, its database and its screenshots below goes to the original author. This fork only revises it (see [What changed in this fork](#what-changed-in-this-fork)). The upstream repository has no licence file, so no licence is granted here beyond what GitHub's terms allow for forks.
+
 Fully-working dentist appointment system which is written in Python using Flask web development, powered by Bootstrap, using MySQL to manipulate data. It's based on a statement of work, developed first its own database and then application. Its database has much quite enough good mock data.
 
 ## Main page of the system
@@ -74,33 +77,40 @@ Denpointment system allows dentists to:
 ![Dentist statistics](https://imgur.com/z3JeWbw.png)
 
 ## How to use Denpointment?
-If you want to use denpointment system with its all things: 
-- Create a database named `dentist_management_system`,
-- And import the file in the github main directory named `dentist_management_system.sql`.
-After that you are almost ready to go, just download the release or clone the repository. Don't forget to make necessary database configuration if you need to do in Denpointment.py. And then run Denpointment.py.
+You need Python 3 and a MySQL (or MariaDB) server.
 
-System should be working on http://127.0.0.1:5000/.
+1. Create a database named `dentist_management_system` and import `dentist_management_system.sql` into it.
+2. Create a virtual environment and install the packages:
+   ```
+   python3 -m venv .venv
+   .venv/bin/pip install -r requirements.txt
+   ```
+   `Flask-MySQLdb` builds the `mysqlclient` package, which needs the MySQL client library on your machine.
+3. Set the database settings and a secret key (all optional, the defaults are shown):
+   ```
+   export DENPOINTMENT_DB_HOST=localhost
+   export DENPOINTMENT_DB_USER=root
+   export DENPOINTMENT_DB_PASSWORD=
+   export DENPOINTMENT_DB_NAME=dentist_management_system
+   export DENPOINTMENT_SECRET_KEY=<a long random string>
+   ```
+   Without a secret key a random one is made at start, so everybody is logged out whenever the server restarts.
+4. Run `.venv/bin/python denpointment.py`. The system runs on http://127.0.0.1:5000/.
 
 ![Running denpointment.py](https://imgur.com/UvlNwx7.png)
 
-If you want to edit or improve somethings just fork the repository.
+### Demo credentials
+These come with the sample database. The password for all three is `tzesh`.
 
-Since the system is fully working, you don't have to use the demo credentials, but just in case:
+| Role | Email |
+| --- | --- |
+| Person | demoperson@gmail.com |
+| Patient | demopatient@gmail.com |
+| Dentist | demodentist@gmail.com |
 
-### Demo person credentials:
+## What changed in this fork
+- The database settings and the secret key are read from environment variables instead of being written in the code.
+- `requirements.txt` lists the packages, `.gitignore` covers the virtual environment, and the README explains the setup step by step.
+- `version.py` holds the version of this fork, raised by a git hook on every commit (`Scripts/bump_version.py`; enable it with `git config core.hooksPath .githooks`).
 
-Email: demoperson@gmail.com
-
-Password: tzesh
-
-### Demo patient credentials:
-
-Email: demopatient@gmail.com
-
-Password: tzesh
-
-### Demo dentist credentials:
-
-Email: demodentist@gmail.com
-
-Password: tzesh
+Not tested: this fork has not been run against a MySQL server. The changes only touch configuration and documentation, and the Python files were checked for syntax errors only.

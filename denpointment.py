@@ -1,6 +1,8 @@
 # Denpointment System - Main Application
 # github.com/Tzesh/Denpointment
 
+import os
+
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from flask_mysqldb import MySQL
 from passlib.handlers.sha2_crypt import sha256_crypt
@@ -10,13 +12,15 @@ from utils import login_required, check_is_patient, check_is_dentist
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = "too_secret_to_reveal"
 app.static_folder = 'static'
 
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = ""
-app.config["MYSQL_DB"] = "dentist_management_system"
+# Settings come from environment variables, so no password or key lives in the code.
+# The defaults match a local development setup.
+app.secret_key = os.environ.get("DENPOINTMENT_SECRET_KEY") or os.urandom(24)
+app.config["MYSQL_HOST"] = os.environ.get("DENPOINTMENT_DB_HOST", "localhost")
+app.config["MYSQL_USER"] = os.environ.get("DENPOINTMENT_DB_USER", "root")
+app.config["MYSQL_PASSWORD"] = os.environ.get("DENPOINTMENT_DB_PASSWORD", "")
+app.config["MYSQL_DB"] = os.environ.get("DENPOINTMENT_DB_NAME", "dentist_management_system")
 app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 mysql = MySQL(app)
