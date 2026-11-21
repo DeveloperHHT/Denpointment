@@ -1,6 +1,6 @@
 # Denpointment
 
-> Denpointment started from the dentist appointment application by [Uğur Dindar (Tzesh)](https://github.com/Tzesh/Denpointment) and has been reworked since: new structure, new interface, tests and a user guide (see [What changed](#what-changed)). The original repository has no licence file.
+> Denpointment is a joint project with [Uğur Dindar (Tzesh)](https://github.com/Tzesh/Denpointment), who wrote the original application. This repository carries it on after the fork and revises it: new structure, new interface, tests and a user guide (see [What changed](#what-changed)). The original repository has no licence file.
 
 A dentist appointment system written in Python with Flask. Patients register, add their contact data and book appointments; dentists see their day, record treatments and medicines, plan holidays and read statistics.
 
